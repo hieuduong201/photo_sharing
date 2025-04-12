@@ -18,7 +18,7 @@ const UserPhotos = () => {
           />
           <CardContent>
             <Typography variant="body2">
-              Ngày đăng: {new Date(photo.date_time).toLocaleString()}
+              Posting Date: {new Date(photo.date_time).toLocaleString()}
             </Typography>
             {photo.comments && photo.comments.map(comment => (
               <div key={comment._id} style={{ marginTop: '8px' }}>
