@@ -1,21 +1,29 @@
-import React from "react";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import React from 'react';
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
-import "./styles.css";
+const TopBar = ({ currentUserName }) => {
+  const location = useLocation();
+  let contextText = '';
 
-/**
- * Define TopBar, a React component of Project 4.
- */
-function TopBar () {
-    return (
-      <AppBar className="topbar-appBar" position="absolute">
-        <Toolbar>
-          <Typography variant="h5" color="inherit">
-            This is the TopBar component
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    );
-}
+  if (location.pathname.startsWith('/photos/')) {
+    contextText = `Photos of ${currentUserName}`;
+  } else if (location.pathname.startsWith('/users/')) {
+    contextText = currentUserName;
+  }
+
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" style={{ flexGrow: 1 }}>
+          Tên của bạn
+        </Typography>
+        <Typography variant="subtitle1">
+          {contextText}
+        </Typography>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default TopBar;
