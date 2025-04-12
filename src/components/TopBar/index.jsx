@@ -16,7 +16,7 @@ const TopBar = ({ currentUserName }) => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Tên của bạn
+          Name
         </Typography>
         <Typography variant="subtitle1">
           {contextText}
