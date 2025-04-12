@@ -21,7 +21,7 @@ const UserDetail = () => {
           to={`/photos/${user._id}`}
           color="primary"
         >
-          Xem ảnh của người dùng
+          View user's Photos
         </Button>
       </CardContent>
     </Card>
