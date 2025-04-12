@@ -1,23 +1,40 @@
-import React from "react";
-import { Typography } from "@mui/material";
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Card, CardContent, Typography } from '@mui/material';
+import models from '../../modelData/models';
 
-import "./styles.css";
-import {useParams} from "react-router-dom";
+const UserPhotos = () => {
+  const { userId } = useParams();
+  const photos = models.photoOfUserModel(userId);
 
-/**
- * Define UserPhotos, a React component of Project 4.
- */
-function UserPhotos () {
-    const user = useParams();
-    return (
-      <Typography variant="body1">
-        This should be the UserPhotos view of the PhotoShare app. Since it is
-        invoked from React Router the params from the route will be in property
-        match. So this should show details of user:
-        {user.userId}. You can fetch the model for the user
-        from models.photoOfUserModel(userId):
-      </Typography>
-    );
-}
+  return (
+    <div>
+      {photos.map(photo => (
+        <Card key={photo._id} style={{ marginBottom: '16px' }}>
+          <img
+            className='img-resize'
+            src={`/images/${photo.file_name}`}
+            alt="User Upload"
+          />
+          <CardContent>
+            <Typography variant="body2">
+              Ngày đăng: {new Date(photo.date_time).toLocaleString()}
+            </Typography>
+            {photo.comments && photo.comments.map(comment => (
+              <div key={comment._id} style={{ marginTop: '8px' }}>
+                <Typography variant="caption">
+                  {new Date(comment.date_time).toLocaleString()} -{' '}
+                  <Link to={`/users/${comment.user._id}`}>
+                    {`${comment.user.first_name} ${comment.user.last_name}`}
+                  </Link>: {comment.comment}
+                </Typography>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
 
 export default UserPhotos;
