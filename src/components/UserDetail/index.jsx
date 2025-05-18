@@ -2,10 +2,19 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, Typography, Button } from '@mui/material';
 import models from '../../modelData/models';
+import { useEffect,useState } from 'react';
+import fetchModel from '../../lib/fetchModelData';
 
 const UserDetail = () => {
   const { userId } = useParams();
-  const user = models.userModel(userId);
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    fetchModel(`/api/user/${userId}`)
+      .then(data => setUser(data))
+      .catch(err => console.error(err));
+  }, [userId]);
+
+  if (!user) return <Typography>Loading...</Typography>;
 
   return (
     <Card>

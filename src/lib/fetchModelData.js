@@ -1,12 +1,9 @@
-/**
- * fetchModel - Fetch a model from the web server.
- *
- * @param {string} url      The URL to issue the GET request.
- *
- */
-function fetchModel(url) {
-  const models = null;
-  return models;
-}
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "";
 
-export default fetchModel;
+export default async function fetchModel(path) {
+  const res = await fetch(`${BACKEND_URL}${path}`);
+  if (!res.ok) {
+    throw new Error(`API ${path} failed: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}

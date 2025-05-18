@@ -1,6 +1,6 @@
 import './App.css';
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Paper } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes, useMatch } from "react-router-dom";
 
@@ -9,17 +9,23 @@ import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList";
 import UserPhotos from "./components/UserPhotos";
 import models from "./modelData/models";
+import { useState } from "react";
+import fetchModel from './lib/fetchModelData';
 
 const Layout = ({ children }) => {
   const matchUsers = useMatch("/users/:userId");
   const matchPhotos = useMatch("/photos/:userId");
-  
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetchModel("/api/user")
+      .then((data) => setUsers(data))
+      .catch((err) => console.error(err));
+  }, []);
   let currentUserName = "";
-  if (matchUsers && matchUsers.params.userId) {
-    const user = models.userModel(matchUsers.params.userId);
-    currentUserName = user ? `${user.first_name} ${user.last_name}` : "";
-  } else if (matchPhotos && matchPhotos.params.userId) {
-    const user = models.userModel(matchPhotos.params.userId);
+  const userId = matchUsers?.params?.userId || matchPhotos?.params?.userId;
+
+  if (userId) {
+    const user = users.find((e) => e._id === userId);
     currentUserName = user ? `${user.first_name} ${user.last_name}` : "";
   }
 
@@ -31,7 +37,7 @@ const Layout = ({ children }) => {
   );
 };
 
-const App = (props) => {
+const App = () => {
   return (
       <Router>
         <Layout>
