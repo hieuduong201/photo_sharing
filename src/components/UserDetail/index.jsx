@@ -1,17 +1,24 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, Typography, Button } from '@mui/material';
-import models from '../../modelData/models';
 import { useEffect,useState } from 'react';
-import fetchModel from '../../lib/fetchModelData';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const UserDetail = () => {
+  const currentUser=useSelector((state)=>(state.user))
   const { userId } = useParams();
   const [user, setUser] = useState({});
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/getdetail/${userId}`);
+      setUser(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
-    fetchModel(`/api/user/${userId}`)
-      .then(data => setUser(data))
-      .catch(err => console.error(err));
+    fetchUser();
   }, [userId]);
 
   if (!user) return <Typography>Loading...</Typography>;
