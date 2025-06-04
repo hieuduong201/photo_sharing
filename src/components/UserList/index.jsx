@@ -1,27 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemText } from '@mui/material';
-import models from '../../modelData/models';
 import { useEffect,useState } from 'react';
-import fetchModel from '../../lib/fetchModelData';
+import axios from 'axios';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/getall`);
+      setUsers(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  
   useEffect(() => {
-    fetchModel("/api/user")
-      .then((data) => setUsers(data))
-      .catch((err) => console.error(err));
+    fetchUsers();
   }, []);
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user`);
-  //     const data = await response.json();
-  //     setUsers(data);
-  //   };
-  //   fetchUsers();
-
-  // },[])
-
+  
   return (
     <List>
       {users.map(user => (
